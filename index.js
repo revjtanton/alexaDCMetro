@@ -1,14 +1,4 @@
 /**
-    Copyright 2014-2015 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
-
-        http://aws.amazon.com/apache2.0/
-
-    or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-*/
-
-/**
  * This is an Alexa Skill for reporting the current DC Metro status for each line.
  */
 
@@ -112,27 +102,6 @@ MetroStatus.prototype.intentHandlers = {
         response.ask("You can say red, orange, silver, blue, yellow, or green.", "You can say red, orange, silver, blue, yellow, or green.");
     }
 };
-
-MetroStatus.status = function() {//Load the request module
-	var request = require('request');
-
-	//Lets configure and request
-	request({
-		url: 'https://api.wmata.com/Incidents.svc/json/Incidents', //URL to hit
-		method: 'GET', //Specify the method
-		headers: { //We can define headers too
-			'api_key': 'a4e46f6ec23946a581aa86dfea5091ff'
-		}
-	}, function(error, response, body){
-		if(error) {
-			console.log(error);
-		} else {
-			console.log(response.statusCode, body);
-		}
-	});
-	
-	return request;
-}
 
 // Create the handler that responds to the Alexa Request.
 exports.handler = function (event, context) {
