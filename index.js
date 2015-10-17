@@ -5,7 +5,7 @@
 /**
  * App ID for the skill
  */
-var APP_ID = 'amzn1.echo-sdk-ams.app.3d2e1dd8-1405-4c01-aa24-f75acc1020d4'; 
+var APP_ID = ''; 
 /**
  * The AlexaSkill prototype and helper functions
  */
@@ -29,7 +29,7 @@ MetroStatus.getMetroStatus = function(response, line) {
 	  path: '/Incidents.svc/json/Incidents',
 	  method: 'GET',
 	  headers: {
-		  api_key: 'a4e46f6ec23946a581aa86dfea5091ff'
+		  api_key: ''
 	  }
 	};
 	var req = https.request(options, function(res) {
