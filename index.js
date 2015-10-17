@@ -48,7 +48,7 @@ MetroStatus.prototype.eventHandlers.onSessionStarted = function (sessionStartedR
 
 MetroStatus.prototype.eventHandlers.onLaunch = function (launchRequest, session, response) {
     console.log("MetroStatus onLaunch requestId: " + launchRequest.requestId + ", sessionId: " + session.sessionId);
-    var speechOutput = "For DC Metro line status please say the line color.  You can say red, orange, silver, blue, yellow, or green.";
+    var speechOutput = "For DC Metro line status please say the line color.";
     var repromptText = "You can say red, orange, silver, blue, yellow, or green.";
     response.ask(speechOutput, repromptText);
 };
@@ -78,12 +78,15 @@ MetroStatus.prototype.intentHandlers = {
 		  res.on('data', function(d) {
 			// process.stdout.write(d);
 			var de = JSON.parse(d);
+			var rep = '';
 			
 			for(var i = 0;i < de.Incidents.length;i++) {
 				if(de.Incidents[i].LinesAffected === "RD;") {
-					response.tellWithCard(de.Incidents[i].Description, "Greeter", de.Incidents[i].Description);
+					rep += de.Incidents[i].Description;
+//					response.tellWithCard(de.Incidents[i].Description, "Greeter", de.Incidents[i].Description);
 				}
 			}
+			response.tellWithCard(rep, "Greeter", rep);
 		  });
 		});
 		req.end();
@@ -112,7 +115,7 @@ MetroStatus.prototype.intentHandlers = {
 			
 			for(var i = 0;i < de.Incidents.length;i++) {
 				if(de.Incidents[i].LinesAffected === "OR;") {
-					response.tellWithCard(de.Incidents[i].Description, "Greeter", de.Incidents[i].Description);
+					response.tellWithCard(de.Incidents[i].Description, "Orange Line Status", de.Incidents[i].Description);
 				}
 			}
 		  });
@@ -247,6 +250,11 @@ MetroStatus.prototype.intentHandlers = {
 		  console.error(e);
 		});
     },
+	
+    PurpleMonkeyIntent: function (intent, session, response) {
+        response.tell("Well!  I'll show you!  Especially for that purple monkey dishwasher remark!");
+    },
+	
     HelpIntent: function (intent, session, response) {
         response.ask("You can say red, orange, silver, blue, yellow, or green.", "You can say red, orange, silver, blue, yellow, or green.");
     }
