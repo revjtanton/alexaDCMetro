@@ -16,7 +16,6 @@
  * App ID for the skill
  */
 var APP_ID = 'amzn1.echo-sdk-ams.app.3d2e1dd8-1405-4c01-aa24-f75acc1020d4'; 
-
 /**
  * The AlexaSkill prototype and helper functions
  */
@@ -28,6 +27,14 @@ var AlexaSkill = require('./AlexaSkill');
 var MetroStatus = function () {
     AlexaSkill.call(this, APP_ID);
 };
+
+/**
+ * Setting up our API calls
+ */
+
+function test() {
+	response.tellWithCard("red line test", "Greeter", "red line test");
+}
 
 // Extend AlexaSkill
 MetroStatus.prototype = Object.create(AlexaSkill.prototype);
@@ -41,8 +48,8 @@ MetroStatus.prototype.eventHandlers.onSessionStarted = function (sessionStartedR
 
 MetroStatus.prototype.eventHandlers.onLaunch = function (launchRequest, session, response) {
     console.log("MetroStatus onLaunch requestId: " + launchRequest.requestId + ", sessionId: " + session.sessionId);
-    var speechOutput = "test";
-    var repromptText = "test";
+    var speechOutput = "For DC Metro line status please say the line color.  You can say red, orange, silver, blue, yellow, or green.";
+    var repromptText = "You can say red, orange, silver, blue, yellow, or green.";
     response.ask(speechOutput, repromptText);
 };
 
@@ -55,27 +62,216 @@ MetroStatus.prototype.eventHandlers.onSessionEnded = function (sessionEndedReque
 MetroStatus.prototype.intentHandlers = {
     // register custom intent handlers
     RedLineIntent: function (intent, session, response) {
-        response.tellWithCard("red line test", "Greeter", "red line test");
+		var https = require('https');
+		var options = {
+		  host: 'api.wmata.com',
+		  port: 443,
+		  path: '/Incidents.svc/json/Incidents',
+		  method: 'GET',
+		  headers: {
+			  api_key: 'a4e46f6ec23946a581aa86dfea5091ff'
+		  }
+		};
+
+		var req = https.request(options, function(res) {
+		  console.log(res.statusCode);
+		  res.on('data', function(d) {
+			// process.stdout.write(d);
+			var de = JSON.parse(d);
+			
+			for(var i = 0;i < de.Incidents.length;i++) {
+				if(de.Incidents[i].LinesAffected === "RD;") {
+					response.tellWithCard(de.Incidents[i].Description, "Greeter", de.Incidents[i].Description);
+				}
+			}
+		  });
+		});
+		req.end();
+
+		req.on('error', function(e) {
+		  console.error(e);
+		});
     },
     OrangeLineIntent: function (intent, session, response) {
-        response.tellWithCard("orange line test", "Greeter", "orange line test");
+		var https = require('https');
+		var options = {
+		  host: 'api.wmata.com',
+		  port: 443,
+		  path: '/Incidents.svc/json/Incidents',
+		  method: 'GET',
+		  headers: {
+			  api_key: 'a4e46f6ec23946a581aa86dfea5091ff'
+		  }
+		};
+
+		var req = https.request(options, function(res) {
+		  console.log(res.statusCode);
+		  res.on('data', function(d) {
+			// process.stdout.write(d);
+			var de = JSON.parse(d);
+			
+			for(var i = 0;i < de.Incidents.length;i++) {
+				if(de.Incidents[i].LinesAffected === "OR;") {
+					response.tellWithCard(de.Incidents[i].Description, "Greeter", de.Incidents[i].Description);
+				}
+			}
+		  });
+		});
+		req.end();
+
+		req.on('error', function(e) {
+		  console.error(e);
+		});
     },
     SilverLineIntent: function (intent, session, response) {
-        response.tellWithCard("silver line test", "Greeter", "silver line test");
+		var https = require('https');
+		var options = {
+		  host: 'api.wmata.com',
+		  port: 443,
+		  path: '/Incidents.svc/json/Incidents',
+		  method: 'GET',
+		  headers: {
+			  api_key: 'a4e46f6ec23946a581aa86dfea5091ff'
+		  }
+		};
+
+		var req = https.request(options, function(res) {
+		  console.log(res.statusCode);
+		  res.on('data', function(d) {
+			// process.stdout.write(d);
+			var de = JSON.parse(d);
+			
+			for(var i = 0;i < de.Incidents.length;i++) {
+				if(de.Incidents[i].LinesAffected === "SV;") {
+					response.tellWithCard(de.Incidents[i].Description, "Greeter", de.Incidents[i].Description);
+				}
+			}
+		  });
+		});
+		req.end();
+
+		req.on('error', function(e) {
+		  console.error(e);
+		});
     },
     BlueLineIntent: function (intent, session, response) {
-        response.tellWithCard("blue line test", "Greeter", "blue line test");
+		var https = require('https');
+		var options = {
+		  host: 'api.wmata.com',
+		  port: 443,
+		  path: '/Incidents.svc/json/Incidents',
+		  method: 'GET',
+		  headers: {
+			  api_key: 'a4e46f6ec23946a581aa86dfea5091ff'
+		  }
+		};
+
+		var req = https.request(options, function(res) {
+		  console.log(res.statusCode);
+		  res.on('data', function(d) {
+			// process.stdout.write(d);
+			var de = JSON.parse(d);
+			
+			for(var i = 0;i < de.Incidents.length;i++) {
+				if(de.Incidents[i].LinesAffected === "BL;") {
+					response.tellWithCard(de.Incidents[i].Description, "Greeter", de.Incidents[i].Description);
+				}
+			}
+		  });
+		});
+		req.end();
+
+		req.on('error', function(e) {
+		  console.error(e);
+		});
     },
     YellowLineIntent: function (intent, session, response) {
-        response.tellWithCard("yellow line test", "Greeter", "yellow line test");
+		var https = require('https');
+		var options = {
+		  host: 'api.wmata.com',
+		  port: 443,
+		  path: '/Incidents.svc/json/Incidents',
+		  method: 'GET',
+		  headers: {
+			  api_key: 'a4e46f6ec23946a581aa86dfea5091ff'
+		  }
+		};
+
+		var req = https.request(options, function(res) {
+		  console.log(res.statusCode);
+		  res.on('data', function(d) {
+			// process.stdout.write(d);
+			var de = JSON.parse(d);
+			
+			for(var i = 0;i < de.Incidents.length;i++) {
+				if(de.Incidents[i].LinesAffected === "YL;") {
+					response.tellWithCard(de.Incidents[i].Description, "Greeter", de.Incidents[i].Description);
+				}
+			}
+		  });
+		});
+		req.end();
+
+		req.on('error', function(e) {
+		  console.error(e);
+		});
     },
     GreenLineIntent: function (intent, session, response) {
-        response.tellWithCard("green line test", "Greeter", "green line test");
+		var https = require('https');
+		var options = {
+		  host: 'api.wmata.com',
+		  port: 443,
+		  path: '/Incidents.svc/json/Incidents',
+		  method: 'GET',
+		  headers: {
+			  api_key: 'a4e46f6ec23946a581aa86dfea5091ff'
+		  }
+		};
+
+		var req = https.request(options, function(res) {
+		  console.log(res.statusCode);
+		  res.on('data', function(d) {
+			// process.stdout.write(d);
+			var de = JSON.parse(d);
+			
+			for(var i = 0;i < de.Incidents.length;i++) {
+				if(de.Incidents[i].LinesAffected === "GN;") {
+					response.tellWithCard(de.Incidents[i].Description, "Greeter", de.Incidents[i].Description);
+				}
+			}
+		  });
+		});
+		req.end();
+
+		req.on('error', function(e) {
+		  console.error(e);
+		});
     },
     HelpIntent: function (intent, session, response) {
-        response.ask("help test.", "help test.");
+        response.ask("You can say red, orange, silver, blue, yellow, or green.", "You can say red, orange, silver, blue, yellow, or green.");
     }
 };
+
+MetroStatus.status = function() {//Load the request module
+	var request = require('request');
+
+	//Lets configure and request
+	request({
+		url: 'https://api.wmata.com/Incidents.svc/json/Incidents', //URL to hit
+		method: 'GET', //Specify the method
+		headers: { //We can define headers too
+			'api_key': 'a4e46f6ec23946a581aa86dfea5091ff'
+		}
+	}, function(error, response, body){
+		if(error) {
+			console.log(error);
+		} else {
+			console.log(response.statusCode, body);
+		}
+	});
+	
+	return request;
+}
 
 // Create the handler that responds to the Alexa Request.
 exports.handler = function (event, context) {
