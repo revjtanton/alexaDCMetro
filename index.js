@@ -29,11 +29,37 @@ var MetroStatus = function () {
 };
 
 /**
- * Setting up our API calls
+ * Getting the data for each line on request from WMATA.
  */
-
-function test() {
-	response.tellWithCard("red line test", "Greeter", "red line test");
+MetroStatus.getMetroStatus = function(response, line) {
+	var https = require('https');
+	var options = {
+	  host: 'api.wmata.com',
+	  port: 443,
+	  path: '/Incidents.svc/json/Incidents',
+	  method: 'GET',
+	  headers: {
+		  api_key: 'a4e46f6ec23946a581aa86dfea5091ff'
+	  }
+	};
+	var req = https.request(options, function(res) {
+		console.log(res.statusCode);
+		res.on('data', function(d) {
+			var de = JSON.parse(d);
+			var rep = '';
+			
+			for(var i = 0;i < de.Incidents.length;i++) {
+				if(de.Incidents[i].LinesAffected === line) {
+					rep += de.Incidents[i].Description;
+				}
+			}
+			response.tellWithCard(rep, "from WMATA's API", rep);
+		});
+	});
+	req.end();
+	req.on('error', function(e) {
+		console.error(e);
+	});
 }
 
 // Extend AlexaSkill
@@ -62,199 +88,26 @@ MetroStatus.prototype.eventHandlers.onSessionEnded = function (sessionEndedReque
 MetroStatus.prototype.intentHandlers = {
     // register custom intent handlers
     RedLineIntent: function (intent, session, response) {
-		var https = require('https');
-		var options = {
-		  host: 'api.wmata.com',
-		  port: 443,
-		  path: '/Incidents.svc/json/Incidents',
-		  method: 'GET',
-		  headers: {
-			  api_key: 'a4e46f6ec23946a581aa86dfea5091ff'
-		  }
-		};
-
-		var req = https.request(options, function(res) {
-		  console.log(res.statusCode);
-		  res.on('data', function(d) {
-			// process.stdout.write(d);
-			var de = JSON.parse(d);
-			var rep = '';
-			
-			for(var i = 0;i < de.Incidents.length;i++) {
-				if(de.Incidents[i].LinesAffected === "RD;") {
-					rep += de.Incidents[i].Description;
-//					response.tellWithCard(de.Incidents[i].Description, "Greeter", de.Incidents[i].Description);
-				}
-			}
-			response.tellWithCard(rep, "Greeter", rep);
-		  });
-		});
-		req.end();
-
-		req.on('error', function(e) {
-		  console.error(e);
-		});
+		MetroStatus.getMetroStatus(response,"RD;");
     },
     OrangeLineIntent: function (intent, session, response) {
-		var https = require('https');
-		var options = {
-		  host: 'api.wmata.com',
-		  port: 443,
-		  path: '/Incidents.svc/json/Incidents',
-		  method: 'GET',
-		  headers: {
-			  api_key: 'a4e46f6ec23946a581aa86dfea5091ff'
-		  }
-		};
-
-		var req = https.request(options, function(res) {
-		  console.log(res.statusCode);
-		  res.on('data', function(d) {
-			// process.stdout.write(d);
-			var de = JSON.parse(d);
-			
-			for(var i = 0;i < de.Incidents.length;i++) {
-				if(de.Incidents[i].LinesAffected === "OR;") {
-					response.tellWithCard(de.Incidents[i].Description, "Orange Line Status", de.Incidents[i].Description);
-				}
-			}
-		  });
-		});
-		req.end();
-
-		req.on('error', function(e) {
-		  console.error(e);
-		});
+		MetroStatus.getMetroStatus(response,"OR;");
     },
     SilverLineIntent: function (intent, session, response) {
-		var https = require('https');
-		var options = {
-		  host: 'api.wmata.com',
-		  port: 443,
-		  path: '/Incidents.svc/json/Incidents',
-		  method: 'GET',
-		  headers: {
-			  api_key: 'a4e46f6ec23946a581aa86dfea5091ff'
-		  }
-		};
-
-		var req = https.request(options, function(res) {
-		  console.log(res.statusCode);
-		  res.on('data', function(d) {
-			// process.stdout.write(d);
-			var de = JSON.parse(d);
-			
-			for(var i = 0;i < de.Incidents.length;i++) {
-				if(de.Incidents[i].LinesAffected === "SV;") {
-					response.tellWithCard(de.Incidents[i].Description, "Greeter", de.Incidents[i].Description);
-				}
-			}
-		  });
-		});
-		req.end();
-
-		req.on('error', function(e) {
-		  console.error(e);
-		});
+		MetroStatus.getMetroStatus(response,"SV;");
     },
     BlueLineIntent: function (intent, session, response) {
-		var https = require('https');
-		var options = {
-		  host: 'api.wmata.com',
-		  port: 443,
-		  path: '/Incidents.svc/json/Incidents',
-		  method: 'GET',
-		  headers: {
-			  api_key: 'a4e46f6ec23946a581aa86dfea5091ff'
-		  }
-		};
-
-		var req = https.request(options, function(res) {
-		  console.log(res.statusCode);
-		  res.on('data', function(d) {
-			// process.stdout.write(d);
-			var de = JSON.parse(d);
-			
-			for(var i = 0;i < de.Incidents.length;i++) {
-				if(de.Incidents[i].LinesAffected === "BL;") {
-					response.tellWithCard(de.Incidents[i].Description, "Greeter", de.Incidents[i].Description);
-				}
-			}
-		  });
-		});
-		req.end();
-
-		req.on('error', function(e) {
-		  console.error(e);
-		});
+		MetroStatus.getMetroStatus(response,"BL;");
     },
     YellowLineIntent: function (intent, session, response) {
-		var https = require('https');
-		var options = {
-		  host: 'api.wmata.com',
-		  port: 443,
-		  path: '/Incidents.svc/json/Incidents',
-		  method: 'GET',
-		  headers: {
-			  api_key: 'a4e46f6ec23946a581aa86dfea5091ff'
-		  }
-		};
-
-		var req = https.request(options, function(res) {
-		  console.log(res.statusCode);
-		  res.on('data', function(d) {
-			// process.stdout.write(d);
-			var de = JSON.parse(d);
-			
-			for(var i = 0;i < de.Incidents.length;i++) {
-				if(de.Incidents[i].LinesAffected === "YL;") {
-					response.tellWithCard(de.Incidents[i].Description, "Greeter", de.Incidents[i].Description);
-				}
-			}
-		  });
-		});
-		req.end();
-
-		req.on('error', function(e) {
-		  console.error(e);
-		});
+		MetroStatus.getMetroStatus(response,"YL;");
     },
     GreenLineIntent: function (intent, session, response) {
-		var https = require('https');
-		var options = {
-		  host: 'api.wmata.com',
-		  port: 443,
-		  path: '/Incidents.svc/json/Incidents',
-		  method: 'GET',
-		  headers: {
-			  api_key: 'a4e46f6ec23946a581aa86dfea5091ff'
-		  }
-		};
-
-		var req = https.request(options, function(res) {
-		  console.log(res.statusCode);
-		  res.on('data', function(d) {
-			// process.stdout.write(d);
-			var de = JSON.parse(d);
-			
-			for(var i = 0;i < de.Incidents.length;i++) {
-				if(de.Incidents[i].LinesAffected === "GN;") {
-					response.tellWithCard(de.Incidents[i].Description, "Greeter", de.Incidents[i].Description);
-				}
-			}
-		  });
-		});
-		req.end();
-
-		req.on('error', function(e) {
-		  console.error(e);
-		});
+		MetroStatus.getMetroStatus(response,"GN;");
     },
-	
     PurpleMonkeyIntent: function (intent, session, response) {
         response.tell("Well!  I'll show you!  Especially for that purple monkey dishwasher remark!");
     },
-	
     HelpIntent: function (intent, session, response) {
         response.ask("You can say red, orange, silver, blue, yellow, or green.", "You can say red, orange, silver, blue, yellow, or green.");
     }
